@@ -1,6 +1,6 @@
 <template>
   <div class="picture-detail">
-    <img :src="detail['img']">
+    <img :src="detail.img">
     <div class="picture-author" v-html="detail.author"></div>
     <div class="picture-day">{{detail.day}}</div>
     <div class="picture-month">{{detail.month}}</div>

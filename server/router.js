@@ -10,8 +10,35 @@ const httpget = request.defaults({jar: true})
 let url = 'http://m.wufazhuce.com'
 let token = {
   picture: null,
-  article: null
+  article: null,
+  music: null
 };
+let fetchToken = function (name) {
+  return function (req, res, next) {
+    if (!token[name]) {
+      httpget(`${url}/one/`, function (err, response, html) {
+        console.log(`${name}Data token爬取结束`)
+        let $ = cheerio.load(html),
+          regex = /One.token\s*=\s*['"]([^'"]+)['"]/g
+        $('script')
+          .filter(function(i, script) {
+            return script.children.length
+          })
+          .each(function (i, script) {
+            let scriptText = script.children[0].data
+            let match = regex.exec(scriptText)
+            if (match) {
+              token[name] = match[1]
+              return false
+            }
+          })
+        token[name] ? next() : res.send([])
+      })
+    } else {
+      next()
+    }
+  }
+}
 
 router.get('/homeData', function (req, res, next) {
   let homeDesc = {},
@@ -45,30 +72,7 @@ router.get('/homeData', function (req, res, next) {
   })
 })
 
-router.get('/pictureData', function (req, res, next) {
-  if (!token.picture) {
-    httpget(`${url}/one/`, function (err, response, html) {
-      console.log('pictureData token爬取结束')
-      let $ = cheerio.load(html),
-          regex = /One.token\s*=\s*['"]([^'"]+)['"]/g
-      $('script')
-        .filter(function(i, script) {
-          return script.children.length
-        })
-        .each(function (i, script) {
-          let scriptText = script.children[0].data
-          let match = regex.exec(scriptText)
-          if (match) {
-            token.picture = match[1]
-            return false
-          }
-        })
-      token.picture ? next() : res.send({})
-    })
-  } else {
-    next()
-  }
-}, function (req, res, next) {
+router.get('/pictureData', fetchToken('picture'), function (req, res, next) {
   let index = req.query.index || '0',
       pictureData = []
   httpget(`${url}/one/ajaxlist/${index}?_token=${token.picture}`)
@@ -81,30 +85,7 @@ router.get('/pictureData', function (req, res, next) {
     .pipe(res)
 })
 
-router.get('/articleData', function (req, res, next) {
-  if (!token.article) {
-    httpget(`${url}/article/`, function (err, response, html) {
-      console.log('articleData token爬取结束')
-      let $ = cheerio.load(html),
-        regex = /One.token\s*=\s*['"]([^'"]+)['"]/g
-      $('script')
-        .filter(function(i, script) {
-          return script.children.length
-        })
-        .each(function (i, script) {
-          let scriptText = script.children[0].data
-          let match = regex.exec(scriptText)
-          if (match) {
-            token.article = match[1]
-            return false
-          }
-        })
-      token.article ? next() : res.send({})
-    })
-  } else {
-    next()
-  }
-}, function (req, res, next) {
+router.get('/articleData', fetchToken('article'), function (req, res, next) {
   let index = req.query.index || '0',
     pictureData = []
   httpget(`${url}/article/ajaxlist/${index}?_token=${token.article}`)
@@ -113,6 +94,19 @@ router.get('/articleData', function (req, res, next) {
     })
     .on('response', function (response) {
       console.log('articleData爬取结束')
+    })
+    .pipe(res)
+})
+
+router.get('/musicData', fetchToken('music'), function (req, res, next) {
+  let index = req.query.index || '0',
+    pictureData = []
+  httpget(`${url}/music/ajaxlist/${index}?_token=${token.music}`)
+    .on('error', function(err) {
+      console.log(err)
+    })
+    .on('response', function (response) {
+      console.log('musicData爬取结束')
     })
     .pipe(res)
 })
@@ -150,6 +144,29 @@ router.get('/articleDetail', function (req, res, next) {
     detail.title = $('.text-title').text()
 
     $('.text-editor').each(function () {
+      detail.editor.push($(this).text())
+    })
+    res.charset = 'utf-8'
+    res.send({detail})
+  })
+})
+
+router.get('/musicDetail', function (req, res, next) {
+  let id = req.query.id,
+    detail = {
+      editor: []
+    }
+
+  httpget(`${url}/music/${id}`, function (err, response, html) {
+    console.log('music爬取结束');
+    let $ = cheerio.load(html, {decodeEntities: false})
+    detail.img = $('.text-detail').html()
+    detail.musicInfo = $('.text-music-info').html()
+    detail.title = $('.text-title').text()
+    detail.author = $('.text-simple-author').text()
+    detail.article = $('.text-content').html()
+
+    $('.text-editor').each(function(){
       detail.editor.push($(this).text())
     })
     res.charset = 'utf-8'

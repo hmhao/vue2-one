@@ -142,10 +142,8 @@ const raspnetjson = /^\/Date\((\d+)\)\/$/
 export default {
   install (Vue) {
     /**
-     *
      * @param {String | Date} date
      * @param {String} format
-     *
      */
     Vue.filter('date', function (date, format) {
       let text = ''

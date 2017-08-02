@@ -344,45 +344,51 @@ span,i{display: inline-block;}
   margin-top: .2rem;
   margin-bottom: 0;
 }
-.detail img{
-  width: 100%;
-}
-.music-detail-img{
-  width: 100%;
-  margin-bottom: .2rem;
-}
-.one-gif-box img{
-  width: 100%;
-  margin:.2rem 0;
-}
-.music-head{
-  position: relative;
-  height: 3rem;
-}
-.music-info{
-  text-align: center;
-  font-size: .3rem;
-  margin: .1rem 0;
-}
-#popupXiamiMusic{
-  display: none;
-}
-.pause-btn{
-  display: none;
-}
-.music-info div{
-  margin: .2rem 0;
-}
-.music-detail-author{
-  display: block;
-  margin: .2rem 0;
-}
 .detail-editor{
   color: #a9a9a9;
   line-height: .4rem;
   font-size: .26rem;
   margin-bottom: .3rem;
   margin-top: .1rem;
+}
+.detail img{
+  width: 100%;
+}
+.detail-music-head{
+  position: relative;
+  height: 3rem;
+}
+.detail-music-info{
+  text-align: center;
+  font-size: .3rem;
+  margin: .1rem 0;
+}
+.detail-music-info div{
+  margin: .2rem 0;
+}
+.detail-music-img{
+  width: 100%;
+  margin-bottom: .2rem;
+}
+.detail-music-title{
+  font-size: .4rem;
+  line-height: .7rem;
+  text-align: center;
+}
+.detail-music-author{
+  display: block;
+  margin: .2rem 0;
+  text-align: center;
+}
+.one-gif-box img{
+  width: 100%;
+  margin:.2rem 0;
+}
+#popupXiamiMusic{
+  display: none;
+}
+.pause-btn{
+  display: none;
 }
 /***pictureDetail***/
 .picture-detail{
