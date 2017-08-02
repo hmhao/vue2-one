@@ -8,6 +8,10 @@ const router = express.Router()
 const httpget = request.defaults({jar: true})
 
 let url = 'http://m.wufazhuce.com'
+let token = {
+  picture: null,
+  article: null
+};
 
 router.get('/homeData', function (req, res, next) {
   let homeDesc = {},
@@ -41,9 +45,8 @@ router.get('/homeData', function (req, res, next) {
   })
 })
 
-let token = null;
 router.get('/pictureData', function (req, res, next) {
-  if (!token) {
+  if (!token.picture) {
     httpget(`${url}/one/`, function (err, response, html) {
       console.log('pictureData token爬取结束')
       let $ = cheerio.load(html),
@@ -56,11 +59,11 @@ router.get('/pictureData', function (req, res, next) {
           let scriptText = script.children[0].data
           let match = regex.exec(scriptText)
           if (match) {
-            token = match[1]
+            token.picture = match[1]
             return false
           }
         })
-      token ? next() : res.send({})
+      token.picture ? next() : res.send({})
     })
   } else {
     next()
@@ -68,12 +71,48 @@ router.get('/pictureData', function (req, res, next) {
 }, function (req, res, next) {
   let index = req.query.index || '0',
       pictureData = []
-  httpget(`${url}/one/ajaxlist/${index}?_token=${token}`)
+  httpget(`${url}/one/ajaxlist/${index}?_token=${token.picture}`)
     .on('error', function(err) {
       console.log(err)
     })
     .on('response', function (response) {
       console.log('pictureData爬取结束')
+    })
+    .pipe(res)
+})
+
+router.get('/articleData', function (req, res, next) {
+  if (!token.article) {
+    httpget(`${url}/article/`, function (err, response, html) {
+      console.log('articleData token爬取结束')
+      let $ = cheerio.load(html),
+        regex = /One.token\s*=\s*['"]([^'"]+)['"]/g
+      $('script')
+        .filter(function(i, script) {
+          return script.children.length
+        })
+        .each(function (i, script) {
+          let scriptText = script.children[0].data
+          let match = regex.exec(scriptText)
+          if (match) {
+            token.article = match[1]
+            return false
+          }
+        })
+      token.article ? next() : res.send({})
+    })
+  } else {
+    next()
+  }
+}, function (req, res, next) {
+  let index = req.query.index || '0',
+    pictureData = []
+  httpget(`${url}/article/ajaxlist/${index}?_token=${token.article}`)
+    .on('error', function(err) {
+      console.log(err)
+    })
+    .on('response', function (response) {
+      console.log('articleData爬取结束')
     })
     .pipe(res)
 })

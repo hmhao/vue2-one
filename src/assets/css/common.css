@@ -16,7 +16,7 @@ body{
   position: relative;
   height: auto;
   min-height: 100%;
-  font-family: arial,\\5FAE\8F6F\96C5\9ED1;
+  font-family: sans-serif,\\5FAE\8F6F\96C5\9ED1;
   overflow: hidden;
 }
 a{
@@ -256,7 +256,7 @@ span,i{display: inline-block;}
   background: #efefef;
   margin-bottom: 1rem;
 }
-.article-box{
+.article-content{
   padding: .2rem .5rem;
   background: #fff;
   margin-bottom: .2rem;
@@ -284,7 +284,7 @@ span,i{display: inline-block;}
   margin: .1rem 0;
   text-indent: 10px;
 }
-.date{
+.article-date{
   font-size: .28rem;
   color: #A9A9A9;
   margin: .2rem 0 .3rem 0;

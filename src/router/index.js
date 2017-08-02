@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import VueResource from 'vue-resource'
 import Home from '@/pages/Home'
 import Picture from '@/pages/Picture'
+import Article from '@/pages/Article'
 import PictureDetail from '@/pages/PictureDetail'
 import ArticleDetail from '@/pages/ArticleDetail'
 import QuestionDetail from '@/pages/QuestionDetail'
@@ -17,6 +18,9 @@ export default new Router({
   }, {
     path: '/picture',
     component: Picture
+  }, {
+    path: '/article',
+    component: Article
   }, {
     path: '/pictureDetail',
     component: PictureDetail

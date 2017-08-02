@@ -1,7 +1,7 @@
 <template>
   <div class="picture-box">
     <template v-for="data in pictureData">
-      <div class="picture-content" :data-id="data.id" @click="articlesToDetail(data.id)">
+      <div class="picture-content" :data-id="data.id" @click="toDetail(data.id)">
         <p class="picture-date">{{data.date}}</p>
         <h3 class="picture-title">{{data.title}}</h3>
         <div class="picture-img"><img :src="data.img_url"></div>
@@ -16,7 +16,7 @@
 
 <script>
 // 引入loading组件,在数据加载时显示,它的显示隐藏由showLoading的值决定
-import Loading from "@/components/loading.vue"
+import Loading from '@/components/loading.vue'
 export default {
   name: 'picture',
   components: {
@@ -42,7 +42,7 @@ export default {
         console.log(error)
       })
     },
-    articlesToDetail (id) {
+    toDetail (id) {
       this.$router.push(`/pictureDetail?id=${id}`)
     }
   }

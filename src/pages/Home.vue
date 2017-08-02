@@ -1,12 +1,12 @@
 <template>
   <div class="home-box">
-    <div class="home-bg" :style="homeDesc.bgImg" @click="articlesToDetail(homeDesc.id,$event)">
+    <div class="home-bg" :style="homeDesc.bgImg" @click="toDetail(homeDesc.id,$event)">
       <div class="home-bgcolor">
         <div class="home-desc">
           <h4 class="home-day">{{homeDesc.day}}</h4>
           <p class="home-month">{{homeDesc.month}}</p>
           <p class="home-text-short">{{homeDesc.textShort}}</p>
-          <span class="home-down"><i class="down"></i></span>     
+          <span class="home-down"><i class="down"></i></span>
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
 
 <script>
 // 引入loading组件,在数据加载时显示,它的显示隐藏由showLoading的值决定
-import Loading from "@/components/loading.vue"
+import Loading from '@/components/loading.vue'
 export default {
   name: 'home',
   components: {
@@ -65,7 +65,7 @@ export default {
         console.log(error)
       })
     },
-    articlesToDetail (id, $event) {
+    toDetail (id, $event) {
       if ($event.target.className != 'down') {
         this.$router.push(`/pictureDetail?id=${id}`)
       }
