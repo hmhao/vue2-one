@@ -315,6 +315,25 @@ span,i{display: inline-block;}
   90% {transform:rotate(324deg);}
   100% {transform:rotate(360deg);}
 }
+/***movie***/
+.movie-img{
+  height: 0.5rem;
+  width: 100%;
+  padding: 2.2rem 0;
+  background: url(/static/images/movie-list-background.png) 0% 0% / 100% 100% no-repeat;
+}
+.movie-img img{
+  width: 95%;
+  height: 3.5rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0.3125rem 0.1875em rgba(230, 230, 230, 0.5);
+  margin: -1.5rem 0.15rem;
+  background-size: cover;
+  overflow: hidden;
+}
+.movie-subtitle{
+  text-align: right;
+}
 /***common detail***/
 .detail{
   background: #fff;
@@ -325,6 +344,10 @@ span,i{display: inline-block;}
 }
 .detail-title{
   font-size: .5rem;
+  line-height: .7rem;
+}
+.detail-subtitle{
+  font-size: .2rem;
   line-height: .7rem;
 }
 .detail-line{
@@ -353,42 +376,6 @@ span,i{display: inline-block;}
 }
 .detail img{
   width: 100%;
-}
-.detail-music-head{
-  position: relative;
-  height: 3rem;
-}
-.detail-music-info{
-  text-align: center;
-  font-size: .3rem;
-  margin: .1rem 0;
-}
-.detail-music-info div{
-  margin: .2rem 0;
-}
-.detail-music-img{
-  width: 100%;
-  margin-bottom: .2rem;
-}
-.detail-music-title{
-  font-size: .4rem;
-  line-height: .7rem;
-  text-align: center;
-}
-.detail-music-author{
-  display: block;
-  margin: .2rem 0;
-  text-align: center;
-}
-.one-gif-box img{
-  width: 100%;
-  margin:.2rem 0;
-}
-#popupXiamiMusic{
-  display: none;
-}
-.pause-btn{
-  display: none;
 }
 /***pictureDetail***/
 .picture-detail{
@@ -428,6 +415,42 @@ span,i{display: inline-block;}
   font-size: .3rem;
   text-align: center;
   margin: .2rem;
+}
+/***musicDetail***/
+.music-head{
+  position: relative;
+  height: 3rem;
+}
+.music-info{
+  text-align: center;
+  font-size: .3rem;
+  margin: .1rem 0;
+}
+.music-info div{
+  margin: .1rem 0;
+}
+.music-img{
+  width: 100%;
+  margin-bottom: .2rem;
+}
+.music-title{
+  font-size: .4rem;
+  line-height: .7rem;
+  text-align: center;
+}
+.music-author{
+  display: block;
+  margin: .2rem 0;
+  text-align: center;
+}
+.play-btn{}
+.pause-btn{
+  display: none;
+}
+/***movieDetail***/
+.movie-author{
+  display: block;
+  text-align: center;
 }
 /***questionDetail***/
 .question-line{

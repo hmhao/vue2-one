@@ -11,7 +11,8 @@ let url = 'http://m.wufazhuce.com'
 let token = {
   picture: null,
   article: null,
-  music: null
+  music: null,
+  movie: null
 };
 let fetchToken = function (name) {
   return function (req, res, next) {
@@ -73,8 +74,7 @@ router.get('/homeData', function (req, res, next) {
 })
 
 router.get('/pictureData', fetchToken('picture'), function (req, res, next) {
-  let index = req.query.index || '0',
-      pictureData = []
+  let index = req.query.index || '0'
   httpget(`${url}/one/ajaxlist/${index}?_token=${token.picture}`)
     .on('error', function(err) {
       console.log(err)
@@ -86,8 +86,7 @@ router.get('/pictureData', fetchToken('picture'), function (req, res, next) {
 })
 
 router.get('/articleData', fetchToken('article'), function (req, res, next) {
-  let index = req.query.index || '0',
-    pictureData = []
+  let index = req.query.index || '0'
   httpget(`${url}/article/ajaxlist/${index}?_token=${token.article}`)
     .on('error', function(err) {
       console.log(err)
@@ -99,14 +98,25 @@ router.get('/articleData', fetchToken('article'), function (req, res, next) {
 })
 
 router.get('/musicData', fetchToken('music'), function (req, res, next) {
-  let index = req.query.index || '0',
-    pictureData = []
+  let index = req.query.index || '0'
   httpget(`${url}/music/ajaxlist/${index}?_token=${token.music}`)
     .on('error', function(err) {
       console.log(err)
     })
     .on('response', function (response) {
       console.log('musicData爬取结束')
+    })
+    .pipe(res)
+})
+
+router.get('/movieData', fetchToken('movie'), function (req, res, next) {
+  let index = req.query.index || '0'
+  httpget(`${url}/movie/ajaxlist/${index}?_token=${token.movie}`)
+    .on('error', function(err) {
+      console.log(err)
+    })
+    .on('response', function (response) {
+      console.log('movieData爬取结束')
     })
     .pipe(res)
 })
@@ -160,9 +170,31 @@ router.get('/musicDetail', function (req, res, next) {
   httpget(`${url}/music/${id}`, function (err, response, html) {
     console.log('music爬取结束');
     let $ = cheerio.load(html, {decodeEntities: false})
-    detail.img = $('.text-detail').html()
+    detail.img = $('.text-detail').find('script, #popupXiamiMusic').remove().end().html()
     detail.musicInfo = $('.text-music-info').html()
     detail.title = $('.text-title').text()
+    detail.author = $('.text-simple-author').text()
+    detail.article = $('.text-content').html()
+
+    $('.text-editor').each(function(){
+      detail.editor.push($(this).text())
+    })
+    res.charset = 'utf-8'
+    res.send({detail})
+  })
+})
+
+router.get('/movieDetail', function (req, res, next) {
+  let id = req.query.id,
+    detail = {
+      editor: []
+    }
+
+  httpget(`${url}/movie/${id}`, function (err, response, html) {
+    console.log('movie爬取结束');
+    let $ = cheerio.load(html, {decodeEntities: false})
+    detail.title = $('.text-title').text()
+    detail.subtitle = $('.text-subtitle').text()
     detail.author = $('.text-simple-author').text()
     detail.article = $('.text-content').html()
 

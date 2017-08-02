@@ -1,10 +1,9 @@
 <template>
   <div class="detail">
-    <div id="music-head"  v-html="detail.img"></div>
-    <div class="music-info" v-html="detail.musicInfo"></div>
-    <h1 class="music-title">{{detail.title}}</h1>
-    <span class="music-author">{{detail.author}}</span>
-    <div v-html="detail.article"></div>
+    <h1 class="detail-title">{{detail.title}}</h1>
+    <h2 class="detail-subtitle">{{detail.subtitle}}</h2>
+    <span class="movie-author">{{detail.author}}</span>
+    <div class="detail-article" v-html="detail.article"></div>
     <i class="detail-editor">{{editor[0]}}</i>
     <i class="detail-editor">{{editor[1]}}</i>
     <Loading v-show="showLoading"></Loading>
@@ -14,7 +13,7 @@
 <script>
 import Loading from '@/components/loading.vue'
 export default {
-  name: 'music-detail',
+  name: 'movie-detail',
   components: {
     Loading
   },
@@ -31,7 +30,7 @@ export default {
   methods: {
     getDetail () {
       let id = this.$route.query.id
-      this.$http.get(`/musicDetail?id=${id}`).then(response => {
+      this.$http.get(`/movieDetail?id=${id}`).then(response => {
         this.detail = response.body.detail
         this.editor = this.detail.editor
         this.showLoading = false
