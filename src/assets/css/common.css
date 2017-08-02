@@ -1,7 +1,7 @@
 *{padding: 0;margin:0;}
 html{
-  width: 100%; 
-  height: 100%; 
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
   max-width: 768px;
   overflow: hidden;
@@ -78,7 +78,7 @@ span,i{display: inline-block;}
   position: absolute;
   top: 0;
   /*opacity: 0;*/
-  left: calc(-3rem - 10px); 
+  left: calc(-3rem - 10px);
   background: #fff;
   box-shadow: 4px -2px 16px 0px #adabab;
   text-align: center;
@@ -106,7 +106,7 @@ span,i{display: inline-block;}
   color:#fff;
   cursor: pointer;
 }
-.home-content{ 
+.home-content{
   padding: .5rem;
   margin-bottom: 1.3rem;
 }
@@ -220,21 +220,24 @@ span,i{display: inline-block;}
   text-align: center;
   color:#828282;
 }
-.content-box{
+.picture-content{
   padding: .2rem .5rem;
   background: #fff;
   margin-bottom: .2rem;
 }
-.picture-tag{
+.picture-date{
   font-size: .45rem;
   color: #A9A9A9;
   margin: .2rem 0;
 }
-.picture-num{
+.picture-title{
   color: #333;
   font-weight: normal;
   font-size: .24rem;
   margin-bottom: .2rem;
+}
+.picture-img img{
+  width: 100%;
 }
 .picture-img-author{
   color: #abaaaa;
@@ -245,10 +248,7 @@ span,i{display: inline-block;}
   line-height: .4rem;
   font-size: .28rem;
 }
-.picture-img img{
-  width: 100%;
-}
-.picture-author{
+.picture-authors{
   margin: .35rem 0;
 }
 /***article***/
@@ -444,4 +444,9 @@ span,i{display: inline-block;}
 }
 .detail .load-box{
   width: calc(100% - 1rem);
+}
+.declare{
+  padding: .4rem;
+  font-size: .3rem;
+  line-height: .5rem;
 }

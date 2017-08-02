@@ -1,33 +1,20 @@
 const express = require('express')
-const http = require('http')
+const request = require('request')
 //cheerio模块,用于对爬取到的页面做解析,得到想要的数据
 const cheerio = require('cheerio')
 const fs = require('fs')
 
 const router = express.Router()
+const httpget = request.defaults({jar: true})
 
 let url = 'http://m.wufazhuce.com'
-
-const httpget = function (url, callback) {
-  let html
-  http.get(url, function (res) {
-    res.on('data', function (chunk) {
-      html += chunk
-    })
-    res.on('end', function () {
-      callback && callback(html)
-    })
-  }).on('error', function (err) {
-    console.log(err)
-  })
-}
 
 router.get('/homeData', function (req, res, next) {
   let homeDesc = {},
       homeArticle = {},
       homeQuestion = {}
 
-  httpget(url, function (html) {
+  httpget(url, function (err, response, html) {
     console.log('home爬取结束')
     let $ = cheerio.load(html)
     let homeLink = ($('.link-div a').attr('href')).split('/')
@@ -54,11 +41,48 @@ router.get('/homeData', function (req, res, next) {
   })
 })
 
+let token = null;
+router.get('/pictureData', function (req, res, next) {
+  if (!token) {
+    httpget(`${url}/one/`, function (err, response, html) {
+      console.log('pictureData token爬取结束')
+      let $ = cheerio.load(html),
+          regex = /One.token\s*=\s*['"]([^'"]+)['"]/g
+      $('script')
+        .filter(function(i, script) {
+          return script.children.length
+        })
+        .each(function (i, script) {
+          let scriptText = script.children[0].data
+          let match = regex.exec(scriptText)
+          if (match) {
+            token = match[1]
+            return false
+          }
+        })
+      token ? next() : res.send({})
+    })
+  } else {
+    next()
+  }
+}, function (req, res, next) {
+  let index = req.query.index || '0',
+      pictureData = []
+  httpget(`${url}/one/ajaxlist/${index}?_token=${token}`)
+    .on('error', function(err) {
+      console.log(err)
+    })
+    .on('response', function (response) {
+      console.log('pictureData爬取结束')
+    })
+    .pipe(res)
+})
+
 router.get('/pictureDetail', function (req, res, next) {
   let id = req.query.id,
       detail = {}
 
-  httpget(`${url}/one/${id}`, function (html) {
+  httpget(`${url}/one/${id}`, function (err, response, html) {
     console.log('picture爬取结束')
     let $ = cheerio.load(html, {decodeEntities: false})
     detail.img = $('.item-picture-img').attr('src')
@@ -78,7 +102,7 @@ router.get('/articleDetail', function (req, res, next) {
         editor: []
       }
 
-  httpget(`${url}/article/${id}`, function (html) {
+  httpget(`${url}/article/${id}`, function (err, response, html) {
     console.log('article爬取结束');
     let $ = cheerio.load(html, {decodeEntities: false})
     detail.title = $('.text-title').text()
@@ -98,7 +122,7 @@ router.get('/questionDetail', function (req, res, next) {
   let id = req.query.id,
       detail = {}
 
-  httpget(`${url}/question/${id}`, function (html) {
+  httpget(`${url}/question/${id}`, function (err, response, html) {
     console.log('question爬取结束');
     let $ = cheerio.load(html, {decodeEntities: false})
     detail.title = $('.text-title').text()

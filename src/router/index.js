@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import VueResource from 'vue-resource'
 import Home from '@/pages/Home'
+import Picture from '@/pages/Picture'
 import PictureDetail from '@/pages/PictureDetail'
-import DrticleDetail from '@/pages/ArticleDetail'
+import ArticleDetail from '@/pages/ArticleDetail'
 import QuestionDetail from '@/pages/QuestionDetail'
 
 Vue.use(Router)
@@ -14,13 +15,16 @@ export default new Router({
     path: '/',
     component: Home
   }, {
-    path: '/PictureDetail',
+    path: '/picture',
+    component: Picture
+  }, {
+    path: '/pictureDetail',
     component: PictureDetail
   }, {
-    path: '/DrticleDetail',
-    component: DrticleDetail
+    path: '/articleDetail',
+    component: ArticleDetail
   }, {
-    path: '/QuestionDetail',
+    path: '/questionDetail',
     component: QuestionDetail
   }]
 })
