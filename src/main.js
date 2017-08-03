@@ -6,7 +6,9 @@ import filters from './filters'
 import router from './router'
 import '@/assets/css/common.css'
 import '@/assets/css/media50px.min.css'
+import VueScroller from 'vue-scroller'
 
+Vue.use(VueScroller)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

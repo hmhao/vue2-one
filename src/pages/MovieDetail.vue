@@ -1,5 +1,6 @@
 <template>
   <div class="detail">
+    <div class="movie-top-bg" :style="detail.topImg"></div>
     <h1 class="detail-title">{{detail.title}}</h1>
     <h2 class="detail-subtitle">{{detail.subtitle}}</h2>
     <span class="movie-author">{{detail.author}}</span>

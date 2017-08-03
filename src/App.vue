@@ -3,7 +3,7 @@
     <appHeader @menu="isMenuShow = true"></appHeader>
     <appMenu ref="menu" @click="isMenuShow = false"></appMenu>
     <div class="main" @click="isMenuShow = false">
-      <keep-alive include="home">
+      <keep-alive :include="keepAlive">
         <router-view></router-view>
       </keep-alive>
     </div>
@@ -19,7 +19,8 @@ export default {
     return {
       animation: null,
       isMenuShow: false,
-      menuOriginalPosition: 0
+      menuOriginalPosition: 0,
+      keepAlive: ['home', 'picture', 'article', 'music', 'movie']
     }
   },
   mounted () {

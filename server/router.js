@@ -5,7 +5,7 @@ const cheerio = require('cheerio')
 const fs = require('fs')
 
 const router = express.Router()
-const httpget = request.defaults({jar: true})
+const httpget = request.defaults({jar: true, json: true})
 
 let url = 'http://m.wufazhuce.com'
 let token = {
@@ -14,7 +14,7 @@ let token = {
   music: null,
   movie: null
 };
-let fetchToken = function (name) {
+let fetchToken = function (name, callback) {
   return function (req, res, next) {
     if (!token[name]) {
       httpget(`${url}/one/`, function (err, response, html) {
@@ -33,12 +33,31 @@ let fetchToken = function (name) {
               return false
             }
           })
-        token[name] ? next() : res.send([])
+        token[name] ? callback(req, res, next) : res.send([])
       })
     } else {
-      next()
+      callback(req, res, next)
     }
   }
+}
+let fetchData = function (name) {
+  return fetchToken(name, function handler(req, res, next) {
+    let index = req.query.index || '0'
+    let path = name === 'picture' ? 'one' : name
+    httpget(`${url}/${path}/ajaxlist/${index}?_token=${token[name]}`, function (err, response, body) {
+      if (err) {
+        console.log(err)
+      }
+      if (body.res === -99) {// token失效
+        console.log(`${name}Data token失效`)
+        token[name] = null
+        fetchToken(name, handler)(req, res, next)
+      } else {
+        console.log(`${name}Data爬取结束`)
+        res.send(body)
+      }
+    })
+  })
 }
 
 router.get('/homeData', function (req, res, next) {
@@ -72,54 +91,10 @@ router.get('/homeData', function (req, res, next) {
     res.send({homeDesc, homeArticle, homeQuestion})
   })
 })
-
-router.get('/pictureData', fetchToken('picture'), function (req, res, next) {
-  let index = req.query.index || '0'
-  httpget(`${url}/one/ajaxlist/${index}?_token=${token.picture}`)
-    .on('error', function(err) {
-      console.log(err)
-    })
-    .on('response', function (response) {
-      console.log('pictureData爬取结束')
-    })
-    .pipe(res)
-})
-
-router.get('/articleData', fetchToken('article'), function (req, res, next) {
-  let index = req.query.index || '0'
-  httpget(`${url}/article/ajaxlist/${index}?_token=${token.article}`)
-    .on('error', function(err) {
-      console.log(err)
-    })
-    .on('response', function (response) {
-      console.log('articleData爬取结束')
-    })
-    .pipe(res)
-})
-
-router.get('/musicData', fetchToken('music'), function (req, res, next) {
-  let index = req.query.index || '0'
-  httpget(`${url}/music/ajaxlist/${index}?_token=${token.music}`)
-    .on('error', function(err) {
-      console.log(err)
-    })
-    .on('response', function (response) {
-      console.log('musicData爬取结束')
-    })
-    .pipe(res)
-})
-
-router.get('/movieData', fetchToken('movie'), function (req, res, next) {
-  let index = req.query.index || '0'
-  httpget(`${url}/movie/ajaxlist/${index}?_token=${token.movie}`)
-    .on('error', function(err) {
-      console.log(err)
-    })
-    .on('response', function (response) {
-      console.log('movieData爬取结束')
-    })
-    .pipe(res)
-})
+router.get('/pictureData', fetchData('picture'))
+router.get('/articleData', fetchData('article'))
+router.get('/musicData', fetchData('music'))
+router.get('/movieData', fetchData('movie'))
 
 router.get('/pictureDetail', function (req, res, next) {
   let id = req.query.id,
@@ -138,7 +113,6 @@ router.get('/pictureDetail', function (req, res, next) {
     res.send({detail})
   })
 })
-
 router.get('/articleDetail', function (req, res, next) {
   let id = req.query.id,
       detail = {
@@ -160,7 +134,6 @@ router.get('/articleDetail', function (req, res, next) {
     res.send({detail})
   })
 })
-
 router.get('/musicDetail', function (req, res, next) {
   let id = req.query.id,
     detail = {
@@ -183,7 +156,6 @@ router.get('/musicDetail', function (req, res, next) {
     res.send({detail})
   })
 })
-
 router.get('/movieDetail', function (req, res, next) {
   let id = req.query.id,
     detail = {
@@ -193,6 +165,7 @@ router.get('/movieDetail', function (req, res, next) {
   httpget(`${url}/movie/${id}`, function (err, response, html) {
     console.log('movie爬取结束');
     let $ = cheerio.load(html, {decodeEntities: false})
+    detail.topImg = $('.text-title').prev().attr('style').replace(/margin-top[^;]+;/, '')
     detail.title = $('.text-title').text()
     detail.subtitle = $('.text-subtitle').text()
     detail.author = $('.text-simple-author').text()
@@ -205,7 +178,6 @@ router.get('/movieDetail', function (req, res, next) {
     res.send({detail})
   })
 })
-
 router.get('/questionDetail', function (req, res, next) {
   let id = req.query.id,
       detail = {}

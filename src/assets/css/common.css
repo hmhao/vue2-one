@@ -31,7 +31,7 @@ span,i{display: inline-block;}
 
 .main{
   position: relative;
-  height: 100vh;
+  height: calc(100vh - .7rem);
   overflow-y: auto;
   width: 100%;
 }
@@ -108,7 +108,7 @@ span,i{display: inline-block;}
 }
 .home-content{
   padding: .5rem;
-  margin-bottom: 1.3rem;
+  margin-bottom: .3rem;
 }
 .home-content  p{
   text-align: justify;
@@ -135,7 +135,7 @@ span,i{display: inline-block;}
   margin: .2rem 0;
 }
 .home-text-short{
-  height: 1.35rem;
+  height: 1.4rem;
   line-height: .45rem;
   overflow: hidden;
   -webkit-line-clamp: 3;
@@ -448,6 +448,9 @@ span,i{display: inline-block;}
   display: none;
 }
 /***movieDetail***/
+.movie-top-bg{
+  margin: -.6rem -.5rem 0;
+}
 .movie-author{
   display: block;
   text-align: center;
@@ -469,7 +472,7 @@ span,i{display: inline-block;}
 }
 .load-box .loding-img{
   width: 32px;
-  margin-top: 50%;
+  margin-top: 50vh;
 }
 .detail .load-box{
   width: calc(100% - 1rem);
