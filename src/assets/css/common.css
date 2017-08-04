@@ -73,18 +73,27 @@ span,i{display: inline-block;}
 }
 /***menu***/
 .side-menu{
-  width: 3rem;
-  height: 100vh;
   position: absolute;
   top: 0;
-  /*opacity: 0;*/
-  left: calc(-3rem - 10px);
+  left: -100vw;
+  z-index: 99;
+}
+.side-menu-list{
+  width: 3rem;
+  height: 100vh;
   background: #fff;
   box-shadow: 4px -2px 16px 0px #adabab;
   text-align: center;
   padding-top: .6rem;
   box-sizing: border-box;
-  z-index: 99;
+  float: left;
+}
+.side-menu-mask{
+  opacity: 0;
+  background: #000;
+  width: calc(100vw - 3rem);
+  height: 100vh;
+  float: left;
 }
 .link-to{
   display: inline-block;

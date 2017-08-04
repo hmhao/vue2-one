@@ -1,5 +1,5 @@
 <template>
-  <scroller :onRefresh="refresh" :onInfinite="infinite">
+  <scroller :onRefresh="refresh" :onInfinite="infinite" ref="scroller">
     <div class="picture-box">
       <template v-for="data in list">
         <div class="picture-content" :data-id="data.id" @click="toDetail(data.id)">
@@ -26,7 +26,11 @@ export default {
   },
   data () {
     return {
-      isActivated: true,
+      isActivated: false,
+      scrollPos: {
+        left: 0,
+        top: 0
+      },
       showLoading: true,
       list: []
     }
@@ -36,9 +40,14 @@ export default {
   },
   activated () {
     this.isActivated = true
+    this.$nextTick(() => {
+      this.$refs.scroller.resize()
+      this.$refs.scroller.scrollTo(this.scrollPos.left, this.scrollPos.top, false)
+    })
   },
   deactivated () {
     this.isActivated = false
+    this.scrollPos = this.$refs.scroller.getPosition()
   },
   methods: {
     getData (index = 0, refresh = false) {// 从后台获取数据

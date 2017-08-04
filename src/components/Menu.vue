@@ -1,8 +1,11 @@
 <template>
   <div class="side-menu">
-    <router-link v-for="link in links" :to="link.path" :key="link.path" class="link-to">
-      {{link.label}}
-    </router-link>
+    <div class="side-menu-list">
+      <router-link v-for="link in links" :to="link.path" :key="link.path" class="link-to">
+        {{link.label}}
+      </router-link>
+    </div>
+    <div class="side-menu-mask"></div>
   </div>
 </template>
 

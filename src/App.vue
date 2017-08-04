@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <appHeader @menu="isMenuShow = true"></appHeader>
-    <appMenu ref="menu" @click="isMenuShow = false"></appMenu>
-    <div class="main" @click="isMenuShow = false">
+    <appMenu @click.native="isMenuShow = false" ref="menu"></appMenu>
+    <div class="main">
       <keep-alive :include="keepAlive">
         <router-view></router-view>
       </keep-alive>
@@ -31,7 +31,7 @@ export default {
     moveTo (speed, position) {
       let menu = this.$refs.menu.$el
       menu.style.left = menu.offsetLeft + speed + 'px'
-      if (Math.abs(Math.abs(menu.offsetLeft) - Math.abs(position)) > 10) {
+      if (Math.abs(Math.abs(menu.offsetLeft) - Math.abs(position)) > 30) {
         this.animation = window.requestAnimationFrame(this.moveTo.bind(this, speed, position))
       } else {
         menu.style.left = position + 'px'
@@ -41,14 +41,13 @@ export default {
   },
   watch: {
     isMenuShow (value) {
-      console.log('isMenuShow', value)
       window.cancelAnimationFrame(this.animation)
       let speed, position
       if (value) {
-        speed = 10
+        speed = 30
         position = 0
       } else {
-        speed = -10
+        speed = -30
         position = this.menuOriginalPosition
       }
       this.animation = window.requestAnimationFrame(this.moveTo.bind(this, speed, position))
