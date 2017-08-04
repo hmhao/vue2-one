@@ -38,6 +38,7 @@ export default {
   },
   created () {
     this.getData()
+    this.$root.$on('gotoTop', this.gotoTop)
   },
   activated () {
     this.isActivated = true
@@ -72,6 +73,9 @@ export default {
     },
     toDetail (id) {
       this.$router.push(`/movieDetail?id=${id}`)
+    },
+    gotoTop () {
+      this.isActivated && this.$refs.scroller.scrollTo(0, 0, true)
     },
     refresh (done) {
       this.getData(0, true).then(function () {

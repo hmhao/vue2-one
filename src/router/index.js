@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import VueResource from 'vue-resource'
 import Home from '@/pages/Home'
 import Picture from '@/pages/Picture'
 import Article from '@/pages/Article'
@@ -14,7 +13,6 @@ import MovieDetail from '@/pages/MovieDetail'
 import QuestionDetail from '@/pages/QuestionDetail'
 
 Vue.use(Router)
-Vue.use(VueResource)
 
 export default new Router({
   routes: [{

@@ -1,13 +1,15 @@
 <template>
-  <div class="detail">
-    <h1 class="detail-title">{{detail.title}}</h1>
-    <span class="detail-line"></span>
-    <span class="detail-author">{{detail.author}}</span>
-    <div class="detail-article" v-html="detail.article"></div>
-    <i class="detail-editor">{{editor[0]}}</i>
-    <i class="detail-editor">{{editor[1]}}</i>
-    <Loading v-show="showLoading"></Loading>
-  </div>
+  <scroller ref="scroller">
+    <div class="detail">
+      <h1 class="detail-title">{{detail.title}}</h1>
+      <span class="detail-line"></span>
+      <span class="detail-author">{{detail.author}}</span>
+      <div class="detail-article" v-html="detail.article"></div>
+      <i class="detail-editor">{{editor[0]}}</i>
+      <i class="detail-editor">{{editor[1]}}</i>
+      <Loading v-show="showLoading"></Loading>
+    </div>
+  </scroller>
 </template>
 
 <script>
@@ -26,6 +28,10 @@ export default {
   },
   created () {
     this.getDetail()
+    this.$root.$on('gotoTop', this.gotoTop)
+  },
+  destroyed () {
+    this.$root.$off('gotoTop', this.gotoTop)
   },
   methods: {
     getDetail () {
@@ -37,6 +43,9 @@ export default {
       }, error => {
         console.log(error)
       })
+    },
+    gotoTop () {
+      this.$refs.scroller.scrollTo(0, 0, true)
     }
   }
 }

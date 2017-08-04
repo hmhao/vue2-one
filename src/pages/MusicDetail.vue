@@ -1,14 +1,16 @@
 <template>
-  <div class="detail">
-    <div id="music-head"  v-html="detail.img"></div>
-    <div class="music-info" v-html="detail.musicInfo"></div>
-    <h1 class="music-title">{{detail.title}}</h1>
-    <span class="music-author">{{detail.author}}</span>
-    <div v-html="detail.article"></div>
-    <i class="detail-editor">{{editor[0]}}</i>
-    <i class="detail-editor">{{editor[1]}}</i>
-    <Loading v-show="showLoading"></Loading>
-  </div>
+  <scroller ref="scroller">
+    <div class="detail">
+      <div id="music-head"  v-html="detail.img"></div>
+      <div class="music-info" v-html="detail.musicInfo"></div>
+      <h1 class="music-title">{{detail.title}}</h1>
+      <span class="music-author">{{detail.author}}</span>
+      <div v-html="detail.article"></div>
+      <i class="detail-editor">{{editor[0]}}</i>
+      <i class="detail-editor">{{editor[1]}}</i>
+      <Loading v-show="showLoading"></Loading>
+    </div>
+  </scroller>
 </template>
 
 <script>
@@ -27,6 +29,10 @@ export default {
   },
   created () {
     this.getDetail()
+    this.$root.$on('gotoTop', this.gotoTop)
+  },
+  destroyed () {
+    this.$root.$off('gotoTop', this.gotoTop)
   },
   methods: {
     getDetail () {
@@ -38,6 +44,9 @@ export default {
       }, error => {
         console.log(error)
       })
+    },
+    gotoTop () {
+      this.$refs.scroller.scrollTo(0, 0, true)
     }
   }
 }

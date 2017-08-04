@@ -53,6 +53,7 @@ export default {
   },
   created () {
     this.getDatas()
+    this.$root.$on('gotoTop', this.gotoTop)
   },
   methods: {
     getDatas () {// 从后台获取数据
@@ -73,6 +74,9 @@ export default {
       } else {
         this.$refs.scroller.scrollTo(0, this.$refs.$content.offsetTop - 10, true)
       }
+    },
+    gotoTop () {
+      this.$refs.scroller.scrollTo(0, 0, true)
     },
     refresh (done) {
       this.getDatas().then(function () {
