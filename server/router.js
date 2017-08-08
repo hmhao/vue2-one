@@ -197,4 +197,65 @@ router.get('/questionDetail', function (req, res, next) {
   })
 })
 
+router.get('/search', function (req, res, next) {
+  let type = req.query.type || '',
+    keyword = req.query.keyword || '',
+    page = req.query.page || 1,
+    searchType = 'search',
+    result = {
+      data: [],
+      currentPage: page,
+      haveNext: false
+    }
+
+  switch (type) {
+    case 'picture': searchType += 'Pic';break;
+    case 'music': searchType += 'Music';break;
+    case 'movie': searchType += 'Movie';break;
+    case 'question': searchType += 'Que';break;
+  }
+
+  httpget(`${url}/${searchType}?searchString=${keyword}&page=${page}`, function (err, response, html) {
+    console.log(`${searchType},${keyword},${page}爬取结束`);
+    let $ = cheerio.load(html, {decodeEntities: false})
+    let $item
+    if (type === 'picture') {
+      $('.search_result .item-picture.link-div').each(function (i, item) {
+        $item = $(item)
+        result.data.push({
+          date: $item.find('.date').text(),
+          img: $item.find('.item-picture-img').attr('src'),
+          author: $item.find('.text-author').text().trim(),
+          content: $item.find('.text-content-short').html(),
+          id: $item.find('.div-link').attr('href').split('/')[4]
+        })
+      })
+    } else if (type === 'article') {
+      $('.search_result .item-text.link-div').each(function (i, item) {
+        $item = $(item)
+
+        let $author = $item.find('.text-author'),
+          author = $author.text().trim();
+
+        $author.remove()
+        result.data.push({
+          date: $item.find('.date').text(),
+          author,
+          title: $item.find('.text-title').text().trim(),
+          content: $item.find('.text-content-short').html(),
+          id: $item.find('.div-link').attr('href').split('/')[4]
+        })
+      })
+    }
+
+    let $listFooter = $('.list-footer')
+    if ($listFooter.length) {
+      result.haveNext = $($listFooter.children[0]).find('a').hasClass('normal')
+    }
+
+    res.charset = 'utf-8'
+    res.send(result)
+  })
+})
+
 module.exports = router

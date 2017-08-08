@@ -3,7 +3,8 @@
     <div class="top-search-mask" @click.stop="$emit('cancel')"></div>
     <input type="text" placeholder="输入作者或标题关键字"
            v-model="keyword"
-           @keyup.enter="toSearch" />
+           @keyup.enter="toSearch"
+           ref="input" />
     <i class="search" @click="toSearch"></i>
     <router-view name="search"></router-view>
   </div>
@@ -18,7 +19,7 @@ export default {
     }
   },
   mounted () {
-
+    this.$refs.input.focus()
   },
   methods: {
     toSearch () {
