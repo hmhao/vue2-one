@@ -2,7 +2,7 @@
   <header class="header clearfix" @click.stop="dblclick">
     <i class="menu" @click.stop="$emit('menu')"></i>
     <h3 class="title">ONE</h3>
-    <i class="search"></i>
+    <i class="search" @click.stop="$emit('search')"></i>
   </header>
 </template>
 

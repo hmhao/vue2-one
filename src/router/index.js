@@ -11,6 +11,7 @@ import ArticleDetail from '@/pages/ArticleDetail'
 import MusicDetail from '@/pages/MusicDetail'
 import MovieDetail from '@/pages/MovieDetail'
 import QuestionDetail from '@/pages/QuestionDetail'
+import SearchList from '@/pages/SearchList'
 
 Vue.use(Router)
 
@@ -48,5 +49,10 @@ export default new Router({
   }, {
     path: '/questionDetail',
     component: QuestionDetail
+  }, {
+    path: '/search',
+    components: {
+      search: SearchList
+    }
   }]
 })

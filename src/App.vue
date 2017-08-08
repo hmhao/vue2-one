@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <appHeader @menu="isMenuShow = true"></appHeader>
+    <appHeader @menu="isMenuShow = true" @search="isSearchShow = true"></appHeader>
     <appMenu @click.native="isMenuShow = false" ref="menu"></appMenu>
+    <appSearch v-if="isSearchShow" @cancel="isSearchShow = false"></appSearch>
     <div class="main">
       <keep-alive :include="keepAlive">
         <router-view></router-view>
@@ -13,15 +14,25 @@
 <script>
 import appHeader from '@/components/Header.vue'
 import appMenu from '@/components/Menu.vue'
+import appSearch from '@/components/Search.vue'
 export default {
   name: 'app',
+  components: {
+    appHeader,
+    appMenu,
+    appSearch
+  },
   data () {
     return {
       animation: null,
       isMenuShow: false,
+      isSearchShow: false,
       menuOriginalPosition: 0,
       keepAlive: ['home', 'picture', 'article', 'music', 'movie']
     }
+  },
+  created () {
+    this.isSearchShow = !!this.$route.path.match(/\/search/g)
   },
   mounted () {
     let menu = this.$refs.menu.$el
@@ -54,11 +65,8 @@ export default {
     },
     $route (to, from) {
       this.isMenuShow = false
+      this.isSearchShow = !!this.$route.path.match(/\/search/g)
     }
-  },
-  components: {
-    appHeader,
-    appMenu
   }
 }
 </script>
