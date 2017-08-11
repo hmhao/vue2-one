@@ -2,7 +2,7 @@
   <div id="app">
     <appHeader @menu="isMenuShow = true" @search="isSearchShow = true"></appHeader>
     <appMenu @click.native="isMenuShow = false" ref="menu"></appMenu>
-    <appSearch v-if="isSearchShow" @cancel="isSearchShow = false"></appSearch>
+    <appSearch :show="isSearchShow" @cancel="isSearchShow = false"></appSearch>
     <div class="main">
       <keep-alive :include="keepAlive">
         <router-view></router-view>

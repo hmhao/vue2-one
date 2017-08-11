@@ -139,8 +139,8 @@ span,i{display: inline-block;}
   top: .7rem;
   width: 100%;
   height: calc(100vh - .7rem);
-  background: #000000;
-  opacity: .5;
+  background: #FFFFFF;
+  opacity: .2;
   z-index: -1;
 }
 /***searchlist***/
@@ -170,7 +170,7 @@ span,i{display: inline-block;}
 .search-tabs li.active{
   color: #00b7ee;
   border-bottom: 3px solid #00b7ee;
-  height: .6rem;
+  height: .65rem;
 }
 .search-list{
   width: 100%;

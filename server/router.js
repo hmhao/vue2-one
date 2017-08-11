@@ -204,7 +204,7 @@ router.get('/search', function (req, res, next) {
     searchType = 'search',
     result = {
       data: [],
-      currentPage: page,
+      page: page,
       haveNext: false
     }
 
@@ -248,9 +248,9 @@ router.get('/search', function (req, res, next) {
       })
     }
 
-    let $listFooter = $('.list-footer')
+    let $listFooter = $('.list-footer a')
     if ($listFooter.length) {
-      result.haveNext = $($listFooter.children[0]).find('a').hasClass('normal')
+      result.haveNext = $($listFooter[$listFooter.length-1]).hasClass('normal')
     }
 
     res.charset = 'utf-8'
